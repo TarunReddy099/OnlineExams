@@ -11,9 +11,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mathsb.setOnClickListener {
-            val i =Intent(this,MathsActivity::class.java)
-            startActivity(i)
+            mathsb.setOnClickListener {
+                val i = Intent(this, MathsActivity::class.java)
+                startActivity(i)
+            }
             physicalsb.setOnClickListener {
                 val ii =Intent(this,PhysicsActivity::class.java)
                 startActivity(ii)
@@ -35,4 +36,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-}
+
