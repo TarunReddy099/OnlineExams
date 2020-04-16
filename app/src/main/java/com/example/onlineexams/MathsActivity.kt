@@ -1,21 +1,53 @@
 package com.example.onlineexams
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+
+
+
+
 
 class MathsActivity : AppCompatActivity() {
-    lateinit var webView: WebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maths)
-       webView = findViewById<WebView>(R.id.webview)
-        webView.webViewClient = WebViewClient()
-        webView.settings.setSupportZoom(true)
-        webView.settings.javaScriptEnabled = true
-        val url = "https://docs.google.com/forms/d/e/1FAIpQLScmQu1h77WUwjbH6GKXxcaOSDUfNY3RRJatI2f-d7Vqq3q5vg/viewform?usp=sf_link"
-        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=$url")
+        var myDB = FirebaseFirestore.getInstance()
+
+
+        val docRef: DocumentReference =
+            myDB.collection("exams").document("math")
+        docRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document != null) {
+                    val title: String? = document.getString("mexam")
+
+                    val myWebView: WebView = findViewById(R.id.webview)
+                    val webSettings: WebSettings = myWebView.getSettings()
+                    webSettings.javaScriptEnabled = true
+                    myWebView.setWebViewClient(WebViewClient())
+                    myWebView.loadUrl(title)
+
+                } else {
+                    Log.d("LOGGER", "No such document")
+                }
+            } else {
+                Log.d("LOGGER", "get failed with ", task.exception)
+            }
+        }
+
+
+
+
+
 
     }
 }
